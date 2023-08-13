@@ -28,7 +28,19 @@ export class UsersService {
     // this.users.push(user);
   };
 
-  findAll(): UserInterface[] {
-    return this.users;
+  async findAll(): Promise<User[]> {
+    const users: User[] = await this.dataSource.getRepository(User).createQueryBuilder('user')
+      .getMany();
+    return users;
   };
+
+  async findOne(id: string) : Promise<User> {
+    const user = await this.dataSource
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .where("user.id = :id", {id: id})
+      .getOne();
+
+      return user;
+  }
 }

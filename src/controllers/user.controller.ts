@@ -1,4 +1,5 @@
-import {Controller, Get, Post, HttpCode, Req, Request, Header, Delete, Put, UseFilters, Param, ParseIntPipe, UsePipes, UseGuards, SetMetadata} from '@nestjs/common';
+import {Controller, Get, Post, HttpCode, Req, Request, Header, Delete, Put, UseFilters, Param, ParseIntPipe, UsePipes, ParseUUIDPipe, UseGuards, SetMetadata} from '@nestjs/common';
+import { User } from 'src/database/entities/user.entity';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/role.guard';
 import UserInterface from 'src/interfaces/user.interface';
@@ -28,26 +29,26 @@ export class UsersController {
 
     @Get()
     @HttpCode(200)
-    async get(@Req() request: Request): Promise<UserInterface[]> {
+    async get(@Req() request: Request): Promise<User[]> {
         // Для этих контроллеров нужно реализоваить типы, которые доступны для request объекта. Что бы linter мозги не парил
         // const limit = request?.body?.limit;
-        const users: UserInterface[] = this.userServiece.findAll();
+        const users: User[] = await this.userServiece.findAll();
         return users;
     }
 
-    @Get('findOne:id')
+    @Get('findOne/:id')
     @HttpCode(200)
-    findOne(@Param('id', ParseIntPipe) id: number, @Req() request: Request): string {
-        console.log('createUser', id);
-        return 'find one user is successful';
+    async findOne(@Param('id', ParseUUIDPipe) id: string, @Req() request: Request): Promise<User> {
+        const user: User = await this.userServiece.findOne(id);
+        return user;
     };
 
     @Get('findAll')
     @HttpCode(200)
-    async findAll(@Req() request: Request): Promise<UserInterface[]> {
+    async findAll(@Req() request: Request): Promise<User[]> {
         // Для этих контроллеров нужно реализоваить типы, которые доступны для request объекта. Что бы linter мозги не парил
         // const limit = request?.body?.limit;
-        const users: UserInterface[] = this.userServiece.findAll();
+        const users: User[] = await this.userServiece.findAll();
         return users;
     };
 
