@@ -1,12 +1,14 @@
 import {Controller, Get, Post, HttpCode, Req, Request, Header, Delete, Put, UseFilters, Param, ParseIntPipe, UsePipes, ParseUUIDPipe, UseGuards, SetMetadata} from '@nestjs/common';
 import { User } from 'src/database/entities/user.entity';
 import { Roles } from 'src/decorators/roles.decorator';
-import { RolesGuard } from 'src/guards/role.guard';
-import UserInterface from 'src/interfaces/user.interface';
 import createUserSchema from 'src/joi.schemas/user.create.body.schema';
 import { JoiValidationPipe } from 'src/pipes/joi.validation.pipe';
 import { UsersService } from 'src/services/users.service';
 import { HttpExceptionFilter } from 'src/utils/filters/http.exception.filter';
+import {DeleteResult} from 'typeorm';
+
+import { RolesGuard } from 'src/guards/role.guard';
+import UserInterface from 'src/interfaces/user.interface';
 
 @Controller('users')
 // @UseGuards(RolesGuard)
@@ -52,18 +54,20 @@ export class UsersController {
         return users;
     };
 
-    @Put()
+    @Put('update-name/:id')
     @HttpCode(200)
-    update(@Req() request: Request): string {
-        console.log('createUser');
-        return 'Update user is successful';
+    async update(@Param('id', ParseUUIDPipe) id: string, @Req() request: Request): Promise<void> {
+
+        const rs = await this.userServiece.updateField('name', 'Leon', id);
+        console.log('update field name is ' + rs);
+
     };
     
 
-    @Delete()
+    @Delete('delete/:id')
     @HttpCode(200)
-    remove(@Req() request: Request): string {
-        console.log('createUser');
-        return 'remove user is successful';
+    async remove(@Param('id', ParseUUIDPipe) id: string, @Req() request: Request): Promise<DeleteResult> {
+        const rs = await this.userServiece.delete(id);
+        return rs;
     }
 }

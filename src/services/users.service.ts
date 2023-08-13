@@ -1,6 +1,6 @@
 import { Injectable,  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, UpdateResult, DeleteResult } from 'typeorm';
 import UserInterface from '../interfaces/user.interface';
 import { User } from 'src/database/entities/user.entity';
 
@@ -12,7 +12,6 @@ export class UsersService {
     private usersRepository: Repository<User>,
     private dataSource: DataSource
   ) {}
-  private readonly users: UserInterface[] = [];
 
   createMany(users: UserInterface[]) {
     console.log(users);
@@ -25,7 +24,6 @@ export class UsersService {
       .into(User)
       .values([user])
       .execute();
-    // this.users.push(user);
   };
 
   async findAll(): Promise<User[]> {
@@ -42,5 +40,29 @@ export class UsersService {
       .getOne();
 
       return user;
+  }
+
+  async updateField(key: any, value: any, id: string) : Promise<UpdateResult> {
+    const result: UpdateResult = await this.dataSource.createQueryBuilder()
+      .update(User)
+      .set({
+        [key]: value
+      })
+      .where('id = :id', {id: id})
+      .execute();
+
+      return result;
+  }
+
+
+  async delete(id: string) : Promise<DeleteResult> {
+    const result: DeleteResult = await this.dataSource.createQueryBuilder()
+      .delete()
+      .from(User)
+      .where('id = :id', {id: id})
+      .execute();
+
+      return result;
+
   }
 }
