@@ -8,7 +8,7 @@ import { UsersService } from 'src/services/users.service';
 import { HttpExceptionFilter } from 'src/utils/filters/http.exception.filter';
 
 @Controller('users')
-@UseGuards(RolesGuard)
+// @UseGuards(RolesGuard)
 export class UsersController {
     constructor(private userServiece: UsersService) {}
 
