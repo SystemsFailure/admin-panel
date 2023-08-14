@@ -13,7 +13,7 @@ export class UsersService {
     private dataSource: DataSource
   ) {}
 
-  createMany(users: UserInterface[]) {
+  async createMany(users: UserInterface[]) : Promise<void> {
     console.log(users);
   };
 

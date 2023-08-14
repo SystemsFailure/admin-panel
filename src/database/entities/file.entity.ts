@@ -1,13 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
-import { User } from './user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
-export class Messages {
+export class File {
     @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Column()
-    body: string;
+    name: string;
+
+    @Column()
+    path: string;
 
     @Column()
     toId: string;
@@ -16,16 +18,15 @@ export class Messages {
     fromId: string;
 
     @Column()
-    isRead: boolean;
-    
+    size: number;
+
+    @Column()
+    ext: string;
+
     @Column('timestamp with time zone', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })  
     atCreated: Date;
-    
+
     @Column('timestamp with time zone', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })  
     atUpdated: Date;
 
-
-
-    @ManyToOne(() => User, (user: User) => user.messages)
-    user: User;
 }

@@ -7,12 +7,17 @@ import { User } from './database/entities/user.entity';
 import { Admin } from './database/entities/admin.entity';
 import { Company } from './database/entities/company.entity';
 import { Messages } from './database/entities/messages.entity';
+import { MessageModule } from './modules/message.module';
+import { FileModule } from './modules/file.module';
+import { File } from './database/entities/file.entity';
 
 // Пока помни, что модули реализованны с помощью паттерна singlenton => можно создать
 // всего один экземляр и использовать его между несколькими модулями. dont't forget
 @Module({
   imports: [
     UserModule,
+    MessageModule,
+    FileModule,
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -21,7 +26,7 @@ import { Messages } from './database/entities/messages.entity';
       username: 'postgres',
       password: '31415',
       database: 'admin-panel-db',
-      entities: [User, Admin, Company, Messages],
+      entities: [User, Admin, Company, Messages, File],
       synchronize: true,
     })
     
@@ -34,6 +39,6 @@ export class AppModule implements NestModule {
       .exclude(
         { path: 'users/create', method: RequestMethod.POST },
       )
-      .forRoutes('users');
+      .forRoutes('users', 'messages');
   }
 };

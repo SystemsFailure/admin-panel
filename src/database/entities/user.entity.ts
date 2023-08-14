@@ -43,10 +43,10 @@ export class User {
     @Column()
     lastLogin: string;
 
-    @Column()
+    @Column('timestamp with time zone', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })  
     atCreated: Date;
 
-    @Column()
+    @Column('timestamp with time zone', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })  
     atUpdated: Date;
 
 
