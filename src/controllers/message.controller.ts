@@ -1,9 +1,10 @@
-import {Controller, Get, Post, HttpCode, Req, Request, Header, Delete, Put, UseFilters, Param, ParseIntPipe, UsePipes, ParseUUIDPipe, UseGuards, SetMetadata} from '@nestjs/common';
+import {Controller, Get, Post, HttpCode, Req, Request, Header, Delete, Put, UseFilters, Param, ParseIntPipe, UsePipes, ParseUUIDPipe, UseGuards, SetMetadata, Body} from '@nestjs/common';
 import { MessagesService } from 'src/services/messages.service';
 import { HttpExceptionFilter } from 'src/utils/filters/http.exception.filter';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Messages } from 'src/database/entities/messages.entity';
 import {DeleteResult} from 'typeorm';
+import UpdateFieldType from 'src/interfaces/bodys.requests/messages.update.field.type';
 
 @Controller('messages')
 export class MessagesController {
@@ -48,4 +49,20 @@ export class MessagesController {
     {
         return await this.messagesService.delete(id);
     }
+
+    @Put('update-field/:id')
+    @HttpCode(200)
+    // @Roles('user')
+    @UseFilters(new HttpExceptionFilter())
+    async updateField(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() body: UpdateFieldType,
+        @Req() request: Request,
+    ) : Promise<any>
+    {
+        const { field, value } =  body;
+        return await this.messagesService.updateField(id, field, value);
+    };
+
+
 }

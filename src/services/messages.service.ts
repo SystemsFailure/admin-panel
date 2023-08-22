@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
 import { ReadStream } from 'fs';
 import { Messages } from 'src/database/entities/messages.entity';
-import { Repository, DataSource, UpdateResult, DeleteResult, InsertResult, Brackets } from 'typeorm';
+import { Repository, DataSource, UpdateResult, DeleteResult, InsertResult, Brackets, FindOperator, UpdateQueryBuilder } from 'typeorm';
 
 
 @Injectable()
@@ -65,6 +65,10 @@ export class MessagesService {
     return messages
   };
 
+  async findById(id: FindOperator<any>): Promise<Messages> {
+    return await this.messagesRepository.findOne({where : { id }});
+  }
+
   async delete(id: string): Promise<DeleteResult> {
     const rs: DeleteResult = await this.dataSource.createQueryBuilder()
       .delete()
@@ -72,6 +76,26 @@ export class MessagesService {
       .where('id = :id', {id: id})
       .execute();
     return rs;
+  };
+
+  async updateField(id: string, field: string, value: string): Promise<UpdateResult> {
+    let result: UpdateResult;
+    try {
+      // const message: Messages = await this.findById(id);
+      // result = await this.messagesRepository.save({
+        // ...message,
+      // });
+      result = await this.dataSource
+        .createQueryBuilder()
+        .update(Messages)
+        .set({
+          [field]: value,
+        })
+        .where('id = :id', {id: id}).execute();
+    } catch (err) {
+      console.log(err);
+    }
+    return result;
   };
 
 
