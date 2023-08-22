@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Company } from './company.entity';
 import { Messages } from './messages.entity';
+import { Task } from './tasks.entity';
 
 @Entity()
 export class User {
@@ -49,11 +50,15 @@ export class User {
     @Column('timestamp with time zone', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })  
     atUpdated: Date;
 
-
     @OneToMany(() => Messages, (message: Messages) => message.user)
     messages: Messages[];
 
-
     @ManyToOne(() => Company, (company: Company) => company.users)
     company: Company;
+
+    @ManyToMany(() => Task)
+    @JoinTable()
+    tasks: Task[];
+
+
 }
