@@ -1,8 +1,7 @@
 
 interface BodyFile {
-    name: string;
-    type: string;
-    parent: string;
+    toId: string;
+    fromId: string;
 }
 
 export {BodyFile}

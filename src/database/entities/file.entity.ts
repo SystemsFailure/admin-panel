@@ -23,6 +23,9 @@ export class File {
     @Column()
     ext: string;
 
+    @Column()
+    mimeType: string;
+
     @Column('timestamp with time zone', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })  
     atCreated: Date;
 

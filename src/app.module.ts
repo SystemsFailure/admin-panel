@@ -10,6 +10,7 @@ import { Messages } from './database/entities/messages.entity';
 import { MessageModule } from './modules/message.module';
 import { FileModule } from './modules/file.module';
 import { File } from './database/entities/file.entity';
+import { MulterModule } from '@nestjs/platform-express';
 
 // Пока помни, что модули реализованны с помощью паттерна singlenton => можно создать
 // всего один экземляр и использовать его между несколькими модулями. dont't forget
@@ -18,6 +19,8 @@ import { File } from './database/entities/file.entity';
     UserModule,
     MessageModule,
     FileModule,
+    MulterModule.register({dest: './uploads'}),
+
 
     TypeOrmModule.forRoot({
       type: 'postgres',
