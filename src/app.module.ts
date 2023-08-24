@@ -12,6 +12,7 @@ import { FileModule } from './modules/file.module';
 import { File } from './database/entities/file.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import { Task } from './database/entities/tasks.entity';
+import { TaskModule } from './modules/task.module';
 
 // Пока помни, что модули реализованны с помощью паттерна singlenton => можно создать
 // всего один экземляр и использовать его между несколькими модулями. dont't forget
@@ -20,6 +21,7 @@ import { Task } from './database/entities/tasks.entity';
     UserModule,
     MessageModule,
     FileModule,
+    TaskModule,
     MulterModule.register({dest: './uploads'}),
 
 

@@ -1,4 +1,4 @@
-import {Controller, Get, Post, HttpCode, Req, Request, Header, Delete, Put, UseFilters, Param, ParseIntPipe, UsePipes, ParseUUIDPipe, UseGuards, SetMetadata} from '@nestjs/common';
+import {Controller, Get, Post, HttpCode, Req, Request, Header, Delete, Put, UseFilters, Param, ParseIntPipe, UsePipes, ParseUUIDPipe, UseGuards, SetMetadata, Body} from '@nestjs/common';
 import { User } from 'src/database/entities/user.entity';
 import { Roles } from 'src/decorators/roles.decorator';
 import createUserSchema from 'src/joi.schemas/user.create.body.schema';
@@ -54,13 +54,12 @@ export class UsersController {
         return users;
     };
 
-    @Put('update-name/:id')
+    @Put('update/:id')
     @HttpCode(200)
-    async update(@Param('id', ParseUUIDPipe) id: string, @Req() request: Request): Promise<void> {
-
-        const rs = await this.userServiece.updateField('name', 'Leon', id);
+    async update(@Param('id', ParseUUIDPipe) id: string, @Req() request: Request, @Body() body: any): Promise<void> {
+        const { key, value } = body;
+        const rs = await this.userServiece.updateField(key, value, id);
         console.log('update field name is ' + rs);
-
     };
     
 
@@ -69,5 +68,22 @@ export class UsersController {
     async remove(@Param('id', ParseUUIDPipe) id: string, @Req() request: Request): Promise<DeleteResult> {
         const rs = await this.userServiece.delete(id);
         return rs;
+    };
+
+    @Put('update-online/:id')
+    @HttpCode(200)
+    async updateOnline(@Param('id', ParseUUIDPipe) id: string, @Body() body: any): Promise<any> {
+        const { value } = body;
+        const rs = await this.userServiece.updateField('isOnline', value, id);
+        // Здесь с помощью sockets нужно обновилять на клиенте данные о пользователе (запросить новые данные из бд, и перерендерить только необходимое)
+        return rs;
+    };
+
+    @Put('add-task/:id')
+    @HttpCode(200)
+    async addTask(@Param('id', ParseUUIDPipe) id: string, @Body() body: any ) : Promise<boolean> {
+        const {taskId} = body;
+        await this.userServiece.addTask(id, taskId);
+        return true;
     }
 }

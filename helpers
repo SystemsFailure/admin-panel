@@ -1,0 +1,7 @@
+await dataSource.createQueryBuilder()
+  .update(User)
+  .set({
+    yourArrayColumn: () => `array_append("yourArrayColumn", 1)`
+  })
+  .where("id = :id", { id: 1 })
+  .execute();

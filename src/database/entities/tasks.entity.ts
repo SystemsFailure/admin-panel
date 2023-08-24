@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'ty
 @Entity()
 export class Task {
     @PrimaryGeneratedColumn('uuid')
-    id: number;
+    id?: number;
 
     @Column()
     name: string;
