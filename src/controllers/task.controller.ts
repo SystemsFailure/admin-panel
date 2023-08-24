@@ -18,8 +18,16 @@ export class TaskController {
     @Get('getTask/:id')
     async getTask(
         @Param('id') id: string,
-        @Request() request: Request,
-    ): Promise<any> {
-        
+    ): Promise<Task> {
+        const task: Task = await this.userServiece.getTaskById(id);
+        return task;
+    };
+
+    @Get('getTasksByUserId/:id')
+    public async getTasksByUserId(
+        @Param('id') id: string,
+    ) : Promise<Task[]> {
+        const tasks: Task[] = await this.userServiece.getAllUsersByTaskId(id);
+        return tasks;
     }
 }

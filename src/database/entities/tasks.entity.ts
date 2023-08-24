@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class Task {
@@ -31,4 +32,9 @@ export class Task {
 
     @Column('timestamp with time zone', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })  
     atUpdated: Date;
+
+    @ManyToMany(() => User, user => user.tasks)
+    @JoinTable()
+    users: User[];
+
 }

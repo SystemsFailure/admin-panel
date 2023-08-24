@@ -56,9 +56,11 @@ export class User {
     @ManyToOne(() => Company, (company: Company) => company.users)
     company: Company;
 
-    @ManyToMany(() => Task)
+    // @ManyToMany(() => Task)
+    // @JoinTable()
+    // tasks: Task[];
+
+    @ManyToMany(() => Task, task => task.users)
     @JoinTable()
     tasks: Task[];
-
-
 }
