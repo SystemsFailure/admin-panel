@@ -51,5 +51,9 @@ export class TaskService {
         const user: User = await this.dataSource.getRepository(User).findOne({where: {id: userId}, relations: ['tasks']})
         arrayTasks = user.tasks;
         return arrayTasks;
+    };
+
+    public async getAllTasks(): Promise<Task[]> {
+        return;
     }
 }
